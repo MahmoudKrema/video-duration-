@@ -1,0 +1,40 @@
+<head>
+
+</head>
+
+<body>
+    <h1>Welcome to electron app</h1>
+    <form>
+        <label>
+            Select a video
+        </label>
+        <input type="file" accept="video/*"/>
+        <button type="submit">Get the video duration</button>
+    </form>
+    <div id="result">
+    </div>
+        
+        <script>
+
+    
+
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+
+            document.querySelector('form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const theVideo = document.querySelector('input').files[0];
+                const theVideoPath = theVideo.path;
+                // console.log(theVideoPath); 
+                ipcRenderer.send('Video:Submit', theVideoPath);
+            });
+
+
+            ipcRenderer.on('Duration:Sent', (event, duration) => {
+                let result = document.querySelector("#result");
+                result.innerHTML = "the duration of the video is: " + duration + " seconds";
+            });
+        </script>
+
+  
+</body>
